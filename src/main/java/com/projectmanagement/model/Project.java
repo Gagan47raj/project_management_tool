@@ -29,6 +29,7 @@ public class Project {
 	private String deadline;
 	
 	@OneToMany(mappedBy = "project",cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private List<Task> task;
 }
 
