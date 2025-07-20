@@ -30,25 +30,29 @@ public class ProjectController {
 	}
 	
 	@GetMapping
-	public List<Project> getAllProject()
+	public List<ProjectDTO> getAllProject()
 	{
-		return projectService.getAllProject();
+		return projectService.getAllProject()
+				.stream()
+				.map(projectService::convertToDTO)
+				.toList();
 	}
 	
 	@GetMapping("/{id}")
-	public Project getProjectById(@PathVariable Long id)
+	public ProjectDTO getProjectById(@PathVariable("id") Long id)
 	{
-		return projectService.getProjectById(id).orElseThrow();
+		Project project = projectService.getProjectById(id).orElseThrow();
+		return projectService.convertToDTO(project);
 	}
 	
 	@PutMapping("/{id}")
-	public Project updateProject(@RequestBody ProjectDTO project, @PathVariable Long id)
+	public Project updateProject(@RequestBody ProjectDTO project, @PathVariable("id") Long id)
 	{
 		return projectService.updateProject(project, id);
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteProject(@PathVariable Long id)
+	public void deleteProject(@PathVariable("id") Long id)
 	{
 		projectService.deleteProject(id);
 	}

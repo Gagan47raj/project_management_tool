@@ -1,6 +1,5 @@
 package com.projectmanagement.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +25,19 @@ public class TaskService {
 	private ProjectRepo projectRepo;
 	
 	public Task createTask(TaskDTO taskDTO) {
-		Project project = projectRepo.findById(taskDTO.getProjectId()).orElseThrow();
-		Task task = new Task();
-		task.setTitle(taskDTO.getTitle());
-		task.setDescription(taskDTO.getDescription());
-		task.setDueDate(taskDTO.getDueDate());
-		task.setPriority(taskDTO.getPriority());
-		task.setStatus(taskDTO.getStatus());
-		task.setAssignedTo(taskDTO.getAssignedTo());
-		task.setProject(project);
-		return taskRepo.save(task);
+		Project project = projectRepo.findById(taskDTO.getProjectId())
+                .orElseThrow(() -> new RuntimeException("Project not found"));
+
+Task task = new Task();
+task.setTitle(taskDTO.getTitle());
+task.setDescription(taskDTO.getDescription());
+task.setDueDate(taskDTO.getDueDate());
+task.setPriority(taskDTO.getPriority());
+task.setStatus(taskDTO.getStatus());
+task.setAssignedTo(taskDTO.getAssignedTo());
+task.setProject(project);
+
+return taskRepo.save(task);
 	}
 	
 	public Page<Task> getTasks(Long projectId,int page, int size, String sortBy) {
@@ -62,6 +64,19 @@ public class TaskService {
 		task.setProject(project);
 		return taskRepo.save(task);
 	}
+	
+	public TaskDTO convertToDTO(Task task) {
+	    TaskDTO dto = new TaskDTO();
+	    dto.setTitle(task.getTitle());
+	    dto.setDescription(task.getDescription());
+	    dto.setDueDate(task.getDueDate());
+	    dto.setPriority(task.getPriority());
+	    dto.setStatus(task.getStatus());
+	    dto.setAssignedTo(task.getAssignedTo());
+	    dto.setProjectId(task.getProject().getId());
+	    return dto;
+	}
+
 	
 	public void deleteTask(Long id)
 	{

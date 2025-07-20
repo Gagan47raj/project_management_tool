@@ -43,20 +43,17 @@ public class ProjectService {
 		return projectRepo.save(project);
 	}
 	
+	public ProjectDTO convertToDTO(Project project) {
+	    ProjectDTO dto = new ProjectDTO();
+	    dto.setName(project.getName());
+	    dto.setDescription(project.getDescription());
+	    dto.setDeadline(project.getDeadline());
+	    return dto;
+	}
+
+	
 	public void deleteProject(Long id)
 	{
 		projectRepo.deleteById(id);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
